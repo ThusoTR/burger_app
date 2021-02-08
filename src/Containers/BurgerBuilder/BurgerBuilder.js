@@ -7,6 +7,7 @@ import Backdrop from '../../Componets/modal/backdrop'
 import Styles from './BurgerBuilder.module.css'
 import Axios from 'axios'
 
+let order_details = "";
 
 class BurgerBuilder extends Component{
     axiosInstance = Axios.create({
@@ -63,6 +64,9 @@ class BurgerBuilder extends Component{
             priority: "Highest priority",
             time: new Date().toLocaleString()
         }
+        
+        order_details = "Thuso"
+
         this.axiosInstance.post('/order.json', order).then((response) =>{
             console.log('post', response)
         }).catch((error)=>{
@@ -116,12 +120,15 @@ class BurgerBuilder extends Component{
         dummy_list[type] = sum_of_type
         this.setState({ingredients: dummy_list})
         this.calculate_price()
+
+        this.props.appManagement.ingredients = this.state.ingredients
     }
     
     order_toggle = () => this.setState({order_initiated: !this.state.order_initiated})
     render(){
         return(
             <Aux>
+                {console.log("Ingredients in Burger Builder = " + this.props.appManagement.ingredients)}
                 <div className = {Styles.align_layout}>
                 <Burger ingredients = {this.state.ingredients}/>
                     <div className = {Styles.controls}>
@@ -145,4 +152,4 @@ class BurgerBuilder extends Component{
     }
 }
 
-export default BurgerBuilder
+export {BurgerBuilder, order_details}

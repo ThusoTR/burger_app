@@ -1,6 +1,6 @@
 import React from 'react'; 
 import Layout from './Componets/Layouts/Layout'
-import BurgerBuilder from './Containers/BurgerBuilder/BurgerBuilder'
+import {BurgerBuilder, order_details} from './Containers/BurgerBuilder/BurgerBuilder'
 import Checkout from './Componets/Checkout/Checkout';
 
 import {
@@ -10,19 +10,27 @@ import {
   Link
 } from "react-router-dom";
 
-function App() {
+import appManager from './manageApp.js';
+
+
+let manageApp = new appManager();
+
+function App(props) {
+
+  console.log("Order details: " + manageApp.ingredients)
+
   return (
     <Router>
       <div>
         <Switch>
             <Route exact path="/">
               <Layout>
-                <BurgerBuilder/>
+                <BurgerBuilder appManagement = {manageApp}/>
               </Layout>
             </Route>
             <Route exact path="/Checkout">
               <Layout>
-                <Checkout/>
+                <Checkout appManagement = {manageApp} state = {order_details}/>
               </Layout>
             </Route>
 
