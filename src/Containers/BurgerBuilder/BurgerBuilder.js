@@ -5,6 +5,7 @@ import Ingre_Adder from '../../Componets/Burger/BuildControls/Ingre_Adder'
 import Modal from '../../Componets/modal/modal'
 import Backdrop from '../../Componets/modal/backdrop'
 import Styles from './BurgerBuilder.module.css'
+import { withRouter } from "react-router-dom";
 
 class BurgerBuilder extends Component{
 
@@ -21,6 +22,7 @@ class BurgerBuilder extends Component{
         if(!this.props.appManagement.userUpdateBurger)
         {
             this.props.appManagement.retrieveIntialIngridents(this.updateIngredients)
+            this.props.appManagement.setIngredients(this.state.ingredients)
         }
         else{
             let currentIngredients = this.props.appManagement.getIngredients()
@@ -53,7 +55,7 @@ class BurgerBuilder extends Component{
         Meat: 3,
     }
     Save_Order = () =>{
-
+        this.props.history.push("/Checkout");
     }
     modal_contents = () =>{
         
@@ -135,4 +137,4 @@ class BurgerBuilder extends Component{
     }
 }
 
-export default BurgerBuilder
+export default withRouter(BurgerBuilder)

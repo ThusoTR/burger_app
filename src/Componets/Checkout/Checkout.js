@@ -22,6 +22,17 @@ class Checkout extends Component{
                 <button>Cancel</button>
                 <button >Continue</button>
             </div>
+
+            <div>
+                <h1>Enter your contact data</h1>
+                <form>
+                  <input name = "userName" type="text" placeholder = "Enter your name"></input>
+                  <input name = "userEmail"type="email" placeholder = "Enter your email address"></input>
+                  <input name = "userAddress" type="text" placeholder = "Enter your street address"></input>
+                  <input name = "postCode" type="text" placeholder = "Enter your postal code"></input>  
+                </form>
+                <button >Continue</button>
+            </div>
             
         </Aux>
         )

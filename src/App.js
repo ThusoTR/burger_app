@@ -7,11 +7,12 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useHistory,
 } from "react-router-dom";
 
 import appManager from './manageApp.js';
-
+import Order from "./Componets/Orders/order"
 
 let manageApp = new appManager();
 
@@ -29,6 +30,11 @@ function App(props) {
             <Route exact path="/Checkout">
               <Layout>
                 <Checkout appManagement = {manageApp} />
+              </Layout>
+            </Route>
+            <Route exact path="/Orders">
+              <Layout>
+                <Order appManagement = {manageApp} />
               </Layout>
             </Route>
 
