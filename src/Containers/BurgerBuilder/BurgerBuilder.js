@@ -5,14 +5,8 @@ import Ingre_Adder from '../../Componets/Burger/BuildControls/Ingre_Adder'
 import Modal from '../../Componets/modal/modal'
 import Backdrop from '../../Componets/modal/backdrop'
 import Styles from './BurgerBuilder.module.css'
-import Axios from 'axios'
-
-let order_details = "";
 
 class BurgerBuilder extends Component{
-    axiosInstance = Axios.create({
-        baseURL: 'https://burger-app-17e16.firebaseio.com/',
-    });
 
     state = {
         ingredients:{
@@ -24,21 +18,23 @@ class BurgerBuilder extends Component{
         order_initiated: false,
     }
     componentDidMount(){
-        this.axiosInstance.get('/Ingredients.json').then((response)=>{
-            console.log(response)
-            this.setState((state)=>{
-                return {ingredients:{
-                    Bacon: response.data.Bacon,
-                    Salad: response.data.Salad, 
-                    Cheese: response.data.Cheese,
-                    Meat: response.data.Meat,
-                }}
-            })
-        }).catch(function (error) {
-            // handle error
-            console.log(error);
-          })
+        if(!this.props.appManagement.userUpdateBurger)
+        {
+            this.props.appManagement.retrieveIntialIngridents(this.updateIngredients)
+        }
+        else{
+            let currentIngredients = this.props.appManagement.getIngredients()
+
+            this.updateIngredients(currentIngredients)
+        }
     }
+    updateIngredients = (newIngredients) =>{
+
+             this.setState((state)=>{
+                console.log("update ingredients")
+               return {ingredients: newIngredients}
+           })
+        }
     burger_price = 90;
     disable_button = { 
                         Bacon: true,
@@ -57,21 +53,7 @@ class BurgerBuilder extends Component{
         Meat: 3,
     }
     Save_Order = () =>{
-        let order = {
-            ingredients: this.state.ingredients,
-            deliveryMethod: "Collection",
-            name: "Thuso Tshishonga",
-            priority: "Highest priority",
-            time: new Date().toLocaleString()
-        }
-        
-        order_details = "Thuso"
 
-        this.axiosInstance.post('/order.json', order).then((response) =>{
-            console.log('post', response)
-        }).catch((error)=>{
-            console.log(error)
-        })
     }
     modal_contents = () =>{
         
@@ -122,13 +104,14 @@ class BurgerBuilder extends Component{
         this.calculate_price()
 
         this.props.appManagement.ingredients = this.state.ingredients
+        this.props.appManagement.setIngredients(this.state.ingredients)
     }
     
     order_toggle = () => this.setState({order_initiated: !this.state.order_initiated})
-    render(){
+    render(){{}
+
         return(
             <Aux>
-                {console.log("Ingredients in Burger Builder = " + this.props.appManagement.ingredients)}
                 <div className = {Styles.align_layout}>
                 <Burger ingredients = {this.state.ingredients}/>
                     <div className = {Styles.controls}>
@@ -152,4 +135,4 @@ class BurgerBuilder extends Component{
     }
 }
 
-export {BurgerBuilder, order_details}
+export default BurgerBuilder

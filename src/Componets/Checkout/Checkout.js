@@ -12,11 +12,12 @@ class Checkout extends Component{
 
     }
     render(){
+        let currentIngredients = this.props.appManagement.getIngredients()
         return(
         <Aux>
             {console.log("Ingredients in Burger Checkout = " + this.props.appManagement.ingredients)}
             <h1>Enjoy your Burger!!</h1>
-            <Burger/>
+            <Burger ingredients = {currentIngredients}/>
             <div>
                 <button>Cancel</button>
                 <button >Continue</button>
