@@ -15,6 +15,9 @@ class appManagement
         baseURL: 'https://burger-app-17e16.firebaseio.com/',
     });
 
+    allOrders = null;
+    retrievedAllOrders = false;
+
     getIngredients()
     {
         return this.ingredients;
@@ -41,6 +44,22 @@ class appManagement
             console.log(error);
           })
 
+    }
+
+    allOrdersretrieval(cb)
+    {
+        this.axiosInstance.get('/order.json')
+        
+        .then((response)=>{
+            this.allOrders = response.data
+            this.retrievedAllOrders = true
+            cb()
+        })
+
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
     }
     setIngredients(selectedIngredients)
     {
