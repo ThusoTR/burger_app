@@ -1,25 +1,35 @@
 import React, {Component} from 'react'
 import Aux from "../../hoc/Aux2"
+import styles from "./order.module.css"
 
 class Orders extends Component{
-    ordersJSX = [];
+    state = {
+        ordersJSX: [],
+    }
+    
     setOrderJSX = () =>
     {
         let allOrdersRetrived = this.props.appManagement.allOrders
-
-        let i = 0;
+        let ordersJSXTemp = []
+        
         for (const property in allOrdersRetrived) {
-            console.log(`${i} ${property}: ${allOrdersRetrived[property]}`);
+            console.log(`${property}: ${allOrdersRetrived[property]}`);
 
-            this.ordersJSX.push(
-                <div>
-                        <h1> Order key = {property} </h1>
+            ordersJSXTemp.push(
+                <div className = {styles.order}>
+                    <h4 key = {property}> Order key = {property} </h4>
+                    <p>Orderd by: {allOrdersRetrived[property].name}</p>
+                    <p>order date:  {allOrdersRetrived[property].time}</p>
+                    <p>Ingredients: Bacon = {allOrdersRetrived[property].ingredients.Bacon};
+                    Cheese = {allOrdersRetrived[property].ingredients.Cheese};
+                    Meat = {allOrdersRetrived[property].ingredients.Meat};
+                    Salad = {allOrdersRetrived[property].ingredients.Salad};</p>
+                    <p>Delivery priority level: {allOrdersRetrived[property].priority}</p>
                 </div>
             )
-            console.log(`length = ${this.ordersJSX.length}`)
-
-            i++
           }
+
+          this.setState({ordersJSX: ordersJSXTemp})
     }
     componentDidMount = () =>
     {
@@ -36,11 +46,10 @@ class Orders extends Component{
 
     }
     render(){
-        console.log(`length = ${this.ordersJSX.length}`)
         return (
             <Aux>
                 <h1>List all orders</h1>
-                {this.ordersJSX}
+                {this.state.ordersJSX}
             </Aux>
         )
     }
