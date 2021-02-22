@@ -9,6 +9,13 @@ class Checkout extends Component{
     state = {
         checkOutContinue: false,
         submiOrder: false,
+        userName: null,
+        userEmail: null,
+        userAddress: null,
+        postalCode: null,
+        invalidForm: false,
+        formErrorMsg: null, 
+        SubmitInProgress: false,
     }
 
     CheckOutForm = (            
@@ -17,12 +24,29 @@ class Checkout extends Component{
         <h2>Enter your contact data</h2>
             <div>
                 <form>
-                    <input name = "userName" type="text" placeholder = "Enter your name"></input>
-                    <input name = "userEmail"type="email" placeholder = "Enter your email address"></input>
-                    <input name = "userAddress" type="text" placeholder = "Enter your street address"></input>
-                    <input name = "postCode" type="text" placeholder = "Enter your postal code"></input>  
+                    <input 
+                    onChange = {(event) => (this.handleFormInputs(event))} 
+                    value={this.state.value}
+                    name = "userName" type="text" placeholder = "Enter your name"></input>
+                    <input
+                    onChange = {(event) => (this.handleFormInputs(event))} 
+                    value={this.state.value}
+                    name = "userEmail" 
+                    type="email" placeholder = "Enter your email address"
+                    >   
+                    </input>
+
+                    <input 
+                    onChange = {(event) => (this.handleFormInputs(event))} 
+                    value={this.state.value}
+                    name = "userAddress" type="text" placeholder = "Enter your street address"></input>
+                    
+                    <input
+                    onChange = {(event) => (this.handleFormInputs(event))} 
+                    value={this.state.value}
+                     name = "postalCode" type="text" placeholder = "Enter your postal code"></input>  
                 </form>
-                <button onClick = {() => (this.continueCheckout())}>Submit Order</button>
+                <button onClick = {() => (this.saveOrder())}>Submit Order</button>
                 <button onClick = {() => (this.checkoutCancel())} >Cancel Order</button>
             </div>
         </div>
@@ -31,10 +55,64 @@ class Checkout extends Component{
     checkoutCancel = () =>{
         this.props.history.push('/')
     }
+    validateForm = () =>
+    {
+        
+        let errorMSG = ""
+        if (this.state.userName === null || this.state.userName.length < 5)
+        {
+            errorMSG = "Enter username of at least 5 characters."
+            this.setState({invalidForm: true,
+                formErrorMsg: errorMSG})
+            return false
+        }
 
+        else if (this.state.userEmail === null)
+        {
+            errorMSG = "Enter a valid email address of at least 5 characters."
+            this.setState({invalidForm: true,
+                formErrorMsg: errorMSG})
+            return false
+        }
+        else if (this.state.userAddress === null || this.state.userAddress.length < 5)
+        {
+            errorMSG = "Enter street address of at least 5 characters."
+            this.setState({invalidForm: true,
+                formErrorMsg: errorMSG})
+            return false
+        }
+        else if (this.state.postalCode === null || this.state.postalCode.length < 4)
+        {
+            errorMSG = "Enter postal Code of at least 4 characters."
+            this.setState({invalidForm: true,
+                formErrorMsg: errorMSG})
+
+            return false
+        }
+        
+        if (this.state.invalidForm)
+            this.setState({invalidForm: false})
+
+        return true
+    }
     continueCheckout = () =>{
         this.setState({checkOutContinue: true})
     }
+    saveOrder = () =>
+    {
+        if(this.validateForm())
+            this.setState({
+                SubmitInProgress: true,
+                checkOutContinue: false,
+            })
+    }
+    handleFormInputs = (event) =>{     
+        let inputName = event.target.name;
+        let inputValue = event.target.value;
+
+        this.setState({[inputName]: inputValue})
+    }
+
     render(){
         let currentIngredients = this.props.appManagement.getIngredients()
         return(
@@ -42,7 +120,7 @@ class Checkout extends Component{
             <div className = {Styles.CheckoutForm}>
                 <div className = {Styles.BurgerContainer}>
                     
-                    {console.log("Ingredients in Burger Checkout = " + this.props.appManagement.ingredients)}
+                    {/* {console.log("Ingredients in Burger Checkout = " + this.props.appManagement.ingredients)} */}
                     <h2>Enjoy your Burger!!</h2>
                     <Burger ingredients = {currentIngredients}/>
                     {!this.state.checkOutContinue ? (                    
@@ -54,7 +132,16 @@ class Checkout extends Component{
 
                 </div>
             </div>
-             {this.state.checkOutContinue ? this.CheckOutForm : null}
+            {this.state.invalidForm ? 
+            <h4>{this.state.formErrorMsg}</h4> : null}
+            {this.state.checkOutContinue ? this.CheckOutForm : null}
+            {this.state.SubmitInProgress ? 
+                
+                <div className = {Styles.loader}>
+                    Loading...
+                </div>
+            : null}
+             
         </Aux>
         )
     }

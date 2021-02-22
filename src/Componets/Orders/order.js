@@ -13,11 +13,9 @@ class Orders extends Component{
         let ordersJSXTemp = []
         
         for (const property in allOrdersRetrived) {
-            console.log(`${property}: ${allOrdersRetrived[property]}`);
-
             ordersJSXTemp.push(
-                <div className = {styles.order}>
-                    <h4 key = {property}> Order key = {property} </h4>
+                <div key = {property} className = {styles.order}>
+                    <h4> Order key = {property} </h4>
                     <p>Orderd by: {allOrdersRetrived[property].name}</p>
                     <p>order date:  {allOrdersRetrived[property].time}</p>
                     <p>Ingredients: Bacon = {allOrdersRetrived[property].ingredients.Bacon};
